@@ -48,6 +48,7 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.grey.shade900,
         appBar: AppBar(
         backgroundColor: Colors.black12,
+        automaticallyImplyLeading: false,
         title: const ModifiedText(text: 'Movies App 🤩', color: Colors.white, size: 20),
         actions: [
           TextButton(
@@ -55,18 +56,18 @@ class _HomePageState extends State<HomePage> {
               showDialog(
                   context: context,
                   builder: (context) => AlertDialog(
-                    backgroundColor: Colors.white,
-                    title: const Text("Logout"),
-                    content: const Text("Are you sure you want to logout?"),
+                    backgroundColor: Colors.blueGrey,
+                    title: const ModifiedText(text: "Logout", color: Colors.white, size: 23),
+                    content: const ModifiedText(text: "Are you sure you want to logout?", color: Colors.white, size: 18),
                     actions: [
                       FlatButton(
-                        child: const Text("NO"),
+                        child: const ModifiedText(text: "NO", color: Colors.white, size: 16),
                         onPressed: () {
                           Navigator.pop(context);
                         },
                       ),
                       FlatButton(
-                        child: const Text("YES"),
+                        child: const ModifiedText(text: "YES", color: Colors.white, size: 16),
                         onPressed: () async {
                           try {
                             await googleSignIn.disconnect();

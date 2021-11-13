@@ -17,15 +17,14 @@ class SignupPage extends StatefulWidget {
 class _SignupPageState extends State<SignupPage> {
 
   final auth = FirebaseAuth.instance;
-  final _firestore = FirebaseFirestore.instance;
   late String name;
   late String email;
   late String password;
   late String confirmPassword;
-  GlobalKey<FormState> formkey = GlobalKey<FormState>();
+  GlobalKey<FormState> signupFormKey = GlobalKey<FormState>();
 
   void validate() {
-    if(formkey.currentState!.validate()) {
+    if(signupFormKey.currentState!.validate()) {
       print('Validated');
     }
     else {
@@ -49,7 +48,6 @@ class _SignupPageState extends State<SignupPage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
-        brightness: Brightness.light,
         backgroundColor: Colors.white,
         leading: IconButton(
           onPressed: () {
@@ -80,7 +78,7 @@ class _SignupPageState extends State<SignupPage> {
                 ],
               ),
               Form(
-                key: formkey,
+                key: signupFormKey,
                 child: Column(
                   children: [
                     TextFormField(

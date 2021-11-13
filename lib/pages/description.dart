@@ -23,6 +23,10 @@ class Description extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade800,
+      appBar: AppBar(
+        backgroundColor: Colors.black12,
+        title: const ModifiedText(text: 'Movies App 🤩', color: Colors.white, size: 20),
+      ),
       body: ListView(children: [
         SizedBox(
             height: 250,

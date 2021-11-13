@@ -17,8 +17,26 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
 
   final auth=FirebaseAuth.instance;
+  GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
   late String email;
   late String password;
+
+  void validate() {
+    if(loginFormKey.currentState!.validate()) {
+      print('Validated');
+    }
+    else {
+      print('Not validated');
+    }
+  }
+
+  String? validateInput(value) {
+    if(value!.isEmpty) {
+      return "Required";
+    } else {
+      return null;
+    }
+  }
 
 
   @override
@@ -29,129 +47,130 @@ class _LoginPageState extends State<LoginPage> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
-        brightness: Brightness.light,
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(Icons.arrow_back,size: 20,color: Colors.black,),
-        ),
       ),
       body: SingleChildScrollView(
         child: SizedBox(
           height: MediaQuery.of(context).size.height,
           width: double.infinity,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Column(
-                      children: [
-                        const Text('Login', style: TextStyle(
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold
-                        ),),
-                        const SizedBox(height: 20,),
-                        Text('Login to your account', style: TextStyle(
-                            fontSize: 15,
-                            color: Colors.grey[700]
-                        ),)
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 40),
-                      child: Column(
+          child:
+          Form(
+            key: loginFormKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Column(
                         children: [
-                          TextField(
-                            decoration: const InputDecoration(labelText: "Email"),
-                            onChanged: (value){
-                              email=value;
-                            },
-                          ),
-                          TextField(
-                            decoration: const InputDecoration(labelText: "Password"),
-                            onChanged: (value){
-                              password=value;
-                            },
-                            obscureText: true,
-                          ),
+                          const Text('Login', style: TextStyle(
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold
+                          ),),
+                          const SizedBox(height: 20,),
+                          Text('Login to your account', style: TextStyle(
+                              fontSize: 15,
+                              color: Colors.grey[700]
+                          ),)
                         ],
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 40),
-                      child: Container(
-                        padding: const EdgeInsets.only(top: 3,left: 3),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(50),
-                            border: const Border(
-                              bottom: BorderSide(color: Colors.black),
-                              top: BorderSide(color: Colors.black),
-                              left: BorderSide(color: Colors.black),
-                              right: BorderSide(color: Colors.black),
-                            )
-                        ),
-                        child: MaterialButton(
-                          minWidth: double.infinity,
-                          height: 60,
-                          onPressed: () {
-                            loginUser();
-                          },
-                          color: Colors.lightBlueAccent,
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(50)
-                          ),
-                          child: const Text('Login', style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 18
-                          ),),
-                        ),
-                      ),
-                    ),
-                    Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 40),
+                        child: Column(
                           children: [
-                            const Text("Don't have an account?"),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => const SignupPage()));
+                            TextFormField(
+                              decoration: const InputDecoration(labelText: "Email"),
+                              validator: validateInput,
+                              onChanged: (value){
+                                email=value;
                               },
-                              child: const Text(' Sign Up',style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 18
-                              ),),
-                            )
+                            ),
+                            TextFormField(
+                              decoration: const InputDecoration(labelText: "Password"),
+                              validator: validateInput,
+                              onChanged: (value){
+                                password=value;
+                              },
+                              obscureText: true,
+                            ),
                           ],
                         ),
-                        SignInButton(
-                          Buttons.Google,
-                          text: "Sign in with Google",
-                          onPressed: () async {
-                            loginGoogle();
-                          },
-                        )
-                      ],
-                    )
-                  ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 40),
+                        child: Container(
+                          padding: const EdgeInsets.only(top: 3,left: 3),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                              border: const Border(
+                                bottom: BorderSide(color: Colors.black),
+                                top: BorderSide(color: Colors.black),
+                                left: BorderSide(color: Colors.black),
+                                right: BorderSide(color: Colors.black),
+                              )
+                          ),
+                          child: MaterialButton(
+                            minWidth: double.infinity,
+                            height: 60,
+                            onPressed: () {
+                              validate();
+                              loginUser();
+                            },
+                            color: Colors.lightBlueAccent,
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50)
+                            ),
+                            child: const Text('Login', style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 18
+                            ),),
+                          ),
+                        ),
+                      ),
+                      Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text("Don't have an account?"),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) => const SignupPage()));
+                                },
+                                child: const Text(' Sign Up',style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 18
+                                ),),
+                              )
+                            ],
+                          ),
+                          SignInButton(
+                            Buttons.Google,
+                            text: "Sign in with Google",
+                            onPressed: () async {
+                              loginGoogle();
+                            },
+                          )
+                        ],
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              Container(
-                height: MediaQuery.of(context).size.height / 2.7,
-                decoration: const BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage('assets/background.jpg'),
-                        fit: BoxFit.cover
-                    )
+                Container(
+                  height: MediaQuery.of(context).size.height / 2.7,
+                  decoration: const BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage('assets/background.jpg'),
+                          fit: BoxFit.cover
+                      )
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
