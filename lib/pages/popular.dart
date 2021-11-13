@@ -1,19 +1,25 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_app/utils/text.dart';
 import 'description.dart';
 
 class PopularShows extends StatelessWidget {
-  const PopularShows({Key? key, required this.popularShows}) : super(key: key);
+  PopularShows({Key? key, required this.popularShows}) : super(key: key);
 
   final List popularShows;
+  final User? user = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(10, 60, 10, 0),
+      padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          user != null ?
+            ModifiedText(text: "Welcome, ${user?.displayName.toString()}", size: 26, color: Colors.white)
+          : const ModifiedText(text: "Welcome, Guest", size: 26, color: Colors.white),
+          const SizedBox(height: 50),
           const ModifiedText(text: 'Popular TV Shows', size: 26, color: Colors.white70),
           const SizedBox(height: 20),
           SizedBox(
@@ -44,12 +50,12 @@ class PopularShows extends StatelessWidget {
                           height: 200,
                           width: 150,
                           decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: NetworkImage(
-                                'https://image.tmdb.org/t/p/w500' + popularShows[index]['poster_path']
-                              ),
-                              fit: BoxFit.cover
-                            )
+                              image: DecorationImage(
+                                  image: NetworkImage(
+                                      'https://image.tmdb.org/t/p/w500' + popularShows[index]['poster_path']
+                                  ),
+                                  fit: BoxFit.cover
+                              )
                           ),
                         ),
                         ModifiedText(text: popularShows[index]['name'] ?? 'Loading', size: 18, color: Colors.white70)
