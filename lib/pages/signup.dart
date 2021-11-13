@@ -5,6 +5,7 @@ import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:movie_app/pages/homepage.dart';
+import 'package:movie_app/pages/login.dart';
 
 
 class SignupPage extends StatefulWidget {
@@ -152,7 +153,7 @@ class _SignupPageState extends State<SignupPage> {
                       const Text("Already have an account?"),
                       TextButton(
                         onPressed: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage()));
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LoginPage()));
                         },
                         child: const Text(' Login',style: TextStyle(
                             fontWeight: FontWeight.w600,
@@ -187,7 +188,7 @@ class _SignupPageState extends State<SignupPage> {
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
     await FirebaseAuth.instance.signInWithCredential(credential).then((value) async {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage()));
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
     });
   }
 
@@ -197,7 +198,7 @@ class _SignupPageState extends State<SignupPage> {
       try{
         await auth.createUserWithEmailAndPassword(
           email: email, password: password,).then((value) async {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage()));
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
         });
       }
       catch(e){
