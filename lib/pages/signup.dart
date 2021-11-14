@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_signin_button/button_list.dart';
 import 'package:flutter_signin_button/button_view.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -198,7 +197,8 @@ class _SignupPageState extends State<SignupPage> {
       try{
         await auth.createUserWithEmailAndPassword(
           email: email, password: password,).then((value) async {
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
+            await auth.currentUser!.updateDisplayName(name);
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const HomePage()));
         });
       }
       catch(e){
