@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:movie_app/pages/login.dart';
-import 'package:movie_app/pages/popular.dart';
+import 'package:movie_app/pages/popular_movies.dart';
+import 'package:movie_app/pages/popular_tv_shows.dart';
 import 'package:movie_app/utils/text.dart';
 import 'package:tmdb_api/tmdb_api.dart';
 
@@ -19,6 +20,7 @@ class _HomePageState extends State<HomePage> {
   User? user = FirebaseAuth.instance.currentUser;
   DateTime dateTime = DateTime.now();
   List popularTvShows = [];
+  List popularMovies = [];
   final String apikey = 'b2cf1684b45e4a6c727938b37b14510f';
   final accessToken = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJiMmNmMTY4NGI0NWU0YTZjNzI3OTM4YjM3YjE0NTEwZiIsInN1YiI6IjYxOGNhNDFlY2I2ZGI1MDAyYzNiYjAxMiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.bt1LNb7JCSn5x-AJ1lIvQIVXuvFdDXC4IZwWS8gzTnM';
 
@@ -31,10 +33,11 @@ class _HomePageState extends State<HomePage> {
         )
     );
     Map tvResult = await tmdbWithCustomLogs.v3.tv.getPouplar();
+    Map movieResult = await tmdbWithCustomLogs.v3.movies.getPouplar();
     setState(() {
       popularTvShows = tvResult['results'];
+      popularMovies = movieResult['results'];
     });
-    print(popularTvShows[2]);
   }
 
   @override
@@ -96,7 +99,6 @@ class _HomePageState extends State<HomePage> {
                               content: Text("You're logged out!"),
                             );
                             ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                            //Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginPage()));
                             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LoginPage()));
                           },
                         )
@@ -109,6 +111,13 @@ class _HomePageState extends State<HomePage> {
         ),
         body: ListView(
           children: [
+            Container(
+                padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                child: user != null ?
+                ModifiedText(text: "Welcome, ${user?.displayName.toString()}", size: 26, color: Colors.white)
+                    : const ModifiedText(text: "Welcome, Guest", size: 26, color: Colors.white)
+            ),
+            PopularMovies(popularMovies: popularMovies),
             PopularShows(popularShows: popularTvShows)
           ],
         ),

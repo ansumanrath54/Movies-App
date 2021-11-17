@@ -1,13 +1,11 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_app/utils/text.dart';
 import 'description.dart';
 
-class PopularShows extends StatelessWidget {
-  PopularShows({Key? key, required this.popularShows}) : super(key: key);
+class PopularMovies extends StatelessWidget {
+  const PopularMovies({Key? key, required this.popularMovies}) : super(key: key);
 
-  final List popularShows;
-  final User? user = FirebaseAuth.instance.currentUser;
+  final List popularMovies;
 
   @override
   Widget build(BuildContext context) {
@@ -16,29 +14,25 @@ class PopularShows extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          user != null ?
-            ModifiedText(text: "Welcome, ${user?.displayName.toString()}", size: 26, color: Colors.white)
-          : const ModifiedText(text: "Welcome, Guest", size: 26, color: Colors.white),
-          const SizedBox(height: 50),
-          const ModifiedText(text: 'Popular TV Shows', size: 26, color: Colors.white70),
-          const SizedBox(height: 20),
+          const ModifiedText(text: 'Popular Movies', size: 26, color: Colors.white70),
+          const SizedBox(height: 10),
           SizedBox(
             height: 300,
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
-              itemCount: popularShows.length,
+              itemCount: popularMovies.length,
               itemBuilder: (context, index) {
                 return InkWell(
                   onTap: () {
                     Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => Description(
-                          name: popularShows[index]['name'].toString(),
+                          name: popularMovies[index]['title'].toString(),
                           bannerurl:
                           'https://image.tmdb.org/t/p/w500' +
-                              popularShows[index]['backdrop_path'].toString(),
-                          description: popularShows[index]['overview'].toString(),
-                          vote: popularShows[index]['vote_average'].toString(),
+                              popularMovies[index]['backdrop_path'].toString(),
+                          description: popularMovies[index]['overview'].toString(),
+                          vote: popularMovies[index]['vote_average'].toString(),
                         )));
                   },
                   child: Container(
@@ -52,13 +46,13 @@ class PopularShows extends StatelessWidget {
                           decoration: BoxDecoration(
                               image: DecorationImage(
                                   image: NetworkImage(
-                                      'https://image.tmdb.org/t/p/w500' + popularShows[index]['poster_path']
+                                      'https://image.tmdb.org/t/p/w500' + popularMovies[index]['poster_path']
                                   ),
                                   fit: BoxFit.cover
                               )
                           ),
                         ),
-                        ModifiedText(text: popularShows[index]['name'] ?? 'Loading', size: 18, color: Colors.white70)
+                        ModifiedText(text: popularMovies[index]['title'] ?? 'Loading', size: 18, color: Colors.white70)
                       ],
                     ),
                   ),
